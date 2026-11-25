@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>SMART INK · 디지털 필기 작업실</title>
+<style>
+:root{--blue:#245ae8;--ink:#17253d;--muted:#64748b;--line:#e2e8f1;--pale:#edf3ff;--green:#12815a;--orange:#ad5900;--radius:14px;font-family:Inter,"Pretendard","Noto Sans KR",system-ui,-apple-system,sans-serif;color:var(--ink);font-size:16px;background:#f4f6fa}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;padding:9px 12px;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:.875rem;white-space:nowrap;transition:background .15s}button:hover{background:#f1f5fc;border-color:#bccae2}button:disabled{cursor:not-allowed;opacity:.44}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #8fb0ff;outline-offset:2px}.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.primary:hover{background:#1748cb}.active{background:var(--pale);border-color:#8eaaf7;color:#214dbb}.danger{color:#b24440}.quiet{background:transparent}.icon{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}svg.symbols{display:none}
+header{background:white;border-bottom:1px solid var(--line);padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:12px}.brandmark{background:var(--blue);border-radius:12px;width:42px;height:42px;display:grid;place-items:center;color:white}.brandmark svg{width:25px;height:25px}.wordmark{font-size:1.18rem;font-weight:800;letter-spacing:.1em}.subtitle{font-size:.8rem;color:var(--muted);margin-top:2px}.header-actions{display:flex;gap:9px;align-items:center}.local-label{font-size:.8rem;color:var(--muted);margin-right:10px}.toolbar{background:white;padding:12px 26px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line)}.tool-group{display:flex;align-items:center;gap:7px;padding-right:13px;margin-right:4px;border-right:1px solid var(--line)}.tool-group:last-child{border:0}.tool-group label{font-size:.875rem;color:var(--muted)}input[type=color]{width:32px;height:32px;padding:2px;border:1px solid var(--line);border-radius:7px;background:white;cursor:pointer}input[type=range]{accent-color:var(--blue);width:90px}select,input[type=number]{border:1px solid #ccd6e5;border-radius:7px;padding:7px 8px;background:#fff;color:var(--ink);font-size:.875rem}select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%2364748b' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;padding-right:28px}.width-label{min-width:39px;font-size:.8rem}.toolbar-spacer{flex:1}.app{display:grid;grid-template-columns:minmax(0,1fr) 306px;height:calc(100vh - 147px);min-height:610px}.workspace{min-width:0;display:flex;flex-direction:column}.documentbar{padding:15px 24px;display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:64px}.document-info{min-width:0}.doc-name{font-size:.875rem;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:400px}.doc-sub{font-size:.75rem;color:var(--muted);margin-top:4px}.pager{display:flex;gap:6px;align-items:center;font-size:.875rem;flex-shrink:0}.pager button{padding:7px}.pager input{width:49px;text-align:center;padding:5px}.zoom-value{min-width:46px;text-align:center;font-size:.8rem}.viewport{position:relative;flex:1;overflow:auto;overscroll-behavior:contain;background:#edf0f6;background-image:radial-gradient(#cdd5e1 .7px,transparent .7px);background-size:16px 16px;touch-action:none}.viewport.pan{cursor:grab}.viewport.panning{cursor:grabbing}.paper-shell{padding:28px 36px 48px;display:flex;justify-content:center;align-items:flex-start;width:max-content;min-width:100%;min-height:100%}.paper{position:relative;flex:none;background:white;box-shadow:0 6px 30px #25365416,0 0 0 1px #dce2eb;overflow:hidden}.paper canvas{position:absolute;inset:0;width:100%;height:100%}#inkCanvas{touch-action:none;cursor:crosshair}#emptyHint{position:absolute;top:31%;left:12%;width:76%;text-align:center;pointer-events:none;color:#75829a}#emptyHint .hint-icon{display:inline-grid;place-items:center;border-radius:18px;background:#f2f6ff;color:var(--blue);width:58px;height:58px;margin-bottom:14px}#emptyHint h1{font-size:1.55rem;font-weight:650;letter-spacing:-.04em;color:#41526e;margin:0 0 12px}#emptyHint p{font-size:.9rem;line-height:1.9;margin:0}.paper.busy #inkCanvas{pointer-events:none}.bottom-status{display:flex;align-items:center;gap:10px;padding:10px 24px;background:white;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)}.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;background:#f1f5fa;border-radius:6px;font-size:.75rem;font-weight:650}.pill.good{color:var(--green);background:#e9f7f0}.pill.warn{color:var(--orange);background:#fff3e1}.bottom-status .spacer{flex:1}.sidebar{background:white;border-left:1px solid var(--line);overflow:auto;padding:19px 18px}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.section-head h2{font-size:.95rem;margin:0;letter-spacing:-.02em}.section-head small{font-size:.75rem;color:var(--muted)}.device{border:1px solid var(--line);border-radius:11px;padding:12px;margin-bottom:9px}.device-top{display:flex;align-items:center;justify-content:space-between;font-size:.875rem;font-weight:650;margin-bottom:8px}.device-line{display:flex;justify-content:space-between;align-items:center;gap:5px}.device-line span{font-size:.8rem;color:var(--muted)}.device-line button{padding:5px 9px;font-size:.75rem}.mode-card{background:#f2f6ff;border:1px solid #dde7ff;border-radius:11px;padding:13px 14px;margin:17px 0}.mode-top{display:flex;justify-content:space-between;align-items:center}.mode-value{color:#2450c2;font-size:1rem;font-weight:750}.mode-card small{display:block;color:#637694;line-height:1.55;margin-top:7px;font-size:.75rem}.telemetry{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.datum{background:#f6f8fb;padding:10px;border-radius:8px}.datum label{display:block;font-size:.75rem;color:var(--muted);margin-bottom:5px}.datum output{font-variant-numeric:tabular-nums;font-size:1.04rem;font-weight:650}.signal-row{display:flex;gap:6px;margin:11px 0 14px}.signal{font-size:.75rem;font-weight:650;border:1px solid var(--line);border-radius:6px;padding:5px 7px;color:#7a889c}.signal.on{color:var(--green);border-color:#a5d9c4;background:#ecf9f2}.counts{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;font-size:.8rem}.count{display:flex;justify-content:space-between;color:var(--muted)}.count strong{color:var(--ink);font-variant-numeric:tabular-nums}.small-note{font-size:.75rem;line-height:1.65;color:var(--muted)}details{border-top:1px solid var(--line);margin-top:18px;padding-top:15px}summary{font-size:.875rem;font-weight:650;cursor:pointer;list-style-position:inside}details[open] summary{margin-bottom:14px}.field{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px;font-size:.8rem}.field input[type=number]{width:78px}.field input[type=range]{width:125px}.field select{max-width:142px}.pair-label{font-size:.8rem;margin:13px 0 7px;display:block}.number-pair{display:flex;gap:7px}.number-pair input{width:100%;min-width:0}.check{display:flex;align-items:center;gap:7px;font-size:.8rem;line-height:1.5;margin:9px 0}.check input{accent-color:var(--blue)}.wide{width:100%}.button-row{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.button-row button{flex:1;font-size:.8rem}.log{height:170px;overflow:auto;background:#152138;color:#c6d7ed;border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:.75rem;line-height:1.6;white-space:pre-wrap;word-break:break-word}.log .error{color:#ffb6af}.log .warn{color:#ffd393}.log .ok{color:#9ee5c2}.test-result{white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:.75rem;line-height:1.7;color:#3b526a;max-height:320px;overflow:auto}.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#192a47;color:white;padding:13px 20px;border-radius:11px;box-shadow:0 8px 30px #17253d25;z-index:100;max-width:calc(100vw - 28px);font-size:.875rem;line-height:1.6}.notice{padding:10px 24px;background:#fff4de;color:#7d4c0c;font-size:.875rem;line-height:1.6}#cursor{position:absolute;border:1px solid #245ae8;border-radius:50%;pointer-events:none;z-index:4;transform:translate(-50%,-50%);display:none}#cursor.eraser{border-color:#b15b00;background:#ffb05017}progress{width:100%;height:5px;accent-color:var(--blue)}[hidden]{display:none!important}
+@media(max-width:1100px){header,.toolbar{padding-left:16px;padding-right:16px}.toolbar-spacer,.local-label{display:none}.app{height:calc(100vh - 197px)}.tool-group{padding-right:8px}.documentbar{padding:12px}.doc-name{max-width:230px}.pager{gap:3px}.pager button{padding:6px}.sidebar{padding:16px 12px}.app{grid-template-columns:minmax(0,1fr) 280px}}
+@media(max-width:780px){header{padding:14px;flex-wrap:wrap}.header-actions{width:100%;justify-content:flex-end}.toolbar{padding:10px;gap:7px}.app{height:auto;display:block;min-height:0}.workspace{height:72vh;min-height:500px}.sidebar{border-left:0;border-top:1px solid var(--line);display:block}.sidebar .devices{display:grid;grid-template-columns:1fr 1fr;gap:10px}.doc-name{max-width:180px}.documentbar{flex-wrap:wrap}.pager{width:100%;justify-content:center}.bottom-status{padding:8px 12px;flex-wrap:wrap}.tool-group{border-right:0}.wordmark{font-size:1.1rem}.paper-shell{padding:20px}.header-actions button{flex:1}.sidebar .telemetry{gap:12px}.log{height:140px}}
+/* 전체 페이지 대신 작업 영역과 사이드바가 각각 스크롤됩니다. */
+@media(min-width:781px){body{height:100dvh;overflow:hidden;display:flex;flex-direction:column}header,.toolbar,.notice{flex:none}.app{flex:1;height:auto;min-height:0;grid-template-rows:minmax(0,1fr)}.workspace,.sidebar,.viewport{min-height:0}}
+</style>
+</head>
+<body>
+<svg class="symbols" aria-hidden="true"><defs>
+<symbol id="i-pen" viewBox="0 0 24 24"><path d="m15 4 5 5M4 20l4-1 12-12a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"/></symbol>
+<symbol id="i-erase" viewBox="0 0 24 24"><path d="m4 13 9-10a2 2 0 0 1 3 0l5 5a2 2 0 0 1 0 3l-9 10H8l-4-4a3 3 0 0 1 0-4ZM8 9l9 9M12 21h9"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8M8 16h6"/></symbol>
+<symbol id="i-usb" viewBox="0 0 24 24"><path d="M12 20V3m-3 3 3-3 3 3M12 16l-5-5V8m5 5 5-4V6"/><circle cx="12" cy="20" r="1.5"/><circle cx="7" cy="7" r="1"/><path d="M16 4h2v2h-2z"/></symbol>
+<symbol id="i-pan" viewBox="0 0 24 24"><path d="M8 12V6a1.5 1.5 0 0 1 3 0v5-7a1.5 1.5 0 0 1 3 0v7-5a1.5 1.5 0 0 1 3 0v6-3a1.5 1.5 0 0 1 3 0v7c0 4-3 6-7 6-3 0-5-2-7-5l-3-4a1.7 1.7 0 0 1 2-2l3 2Z"/></symbol>
+<symbol id="i-undo" viewBox="0 0 24 24"><path d="M8 5 3 10l5 5M3 10h12a6 6 0 0 1 0 12" transform="translate(0 -2)"/></symbol>
+<symbol id="i-redo" viewBox="0 0 24 24"><path d="m16 5 5 5-5 5m5-5H9a6 6 0 0 0 0 12" transform="translate(0 -2)"/></symbol>
+<symbol id="i-save" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7M14 10v7"/></symbol>
+</defs></svg>
+<header>
+ <div class="brand"><div class="brandmark"><svg class="icon"><use href="#i-pen"/></svg></div><div><div class="wordmark">SMART INK</div><div class="subtitle">펜의 감각을, 화면 위에.</div></div></div>
+ <div class="header-actions"><span class="local-label">브라우저에서 처리 · 파일 업로드 없음</span><button id="openPdf"><svg class="icon"><use href="#i-file"/></svg>PDF 불러오기</button><button id="savePng"><svg class="icon"><use href="#i-save"/></svg>PNG 저장</button><button id="savePdf" class="primary"><svg class="icon"><use href="#i-save"/></svg>PDF 저장</button></div>
+</header>
+<div id="compatNotice" class="notice" hidden></div>
+<nav class="toolbar" aria-label="필기 도구">
+ <div class="tool-group"><button id="connectSTM"><svg class="icon"><use href="#i-usb"/></svg>STM32 연결</button></div>
+ <div class="tool-group"><button id="penBtn" class="active" aria-pressed="true"><svg class="icon"><use href="#i-pen"/></svg>펜</button><button id="eraserBtn" aria-pressed="false"><svg class="icon"><use href="#i-erase"/></svg>지우개</button><input type="color" id="penColor" value="#245ae8" title="펜 색상" aria-label="펜 색상"><label for="penWidth">굵기</label><input id="penWidth" type="range" min="0.5" max="12" step="0.5" value="2.5"><output id="widthValue" class="width-label">2.5 pt</output></div>
+ <div class="tool-group"><button id="panBtn" title="화면 이동 · Space 누르기" aria-pressed="false"><svg class="icon"><use href="#i-pan"/></svg>이동</button><button id="undoBtn" aria-label="실행 취소" title="실행 취소 · Ctrl+Z"><svg class="icon"><use href="#i-undo"/></svg></button><button id="redoBtn" aria-label="다시 실행" title="다시 실행 · Ctrl+Shift+Z"><svg class="icon"><use href="#i-redo"/></svg></button><button id="clearBtn" class="danger" title="모든 페이지의 필기 지우기" aria-label="전체 필기 지우기"><svg class="icon"><use href="#i-trash"/></svg></button></div>
+ <div class="toolbar-spacer"></div><label class="field" style="margin:0">입력 <select id="inputSource" aria-label="필기 입력"><option value="mouse">마우스 / 펜</option><option value="sensor">STM32 센서</option><option value="demo">가상 STM32</option></select></label>
+</nav>
+<main class="app">
+ <section class="workspace" aria-label="필기 작업 영역">
+  <div class="documentbar"><div class="document-info"><div id="docName" class="doc-name">새 노트</div><div id="docSub" class="doc-sub">16:9 노트 · 자유롭게 쓰거나 PDF를 열어 보세요</div></div><div class="pager"><button id="prevPage" aria-label="이전 페이지">‹</button><input id="pageNumber" type="number" min="1" value="1" aria-label="페이지 번호"><span id="pageCount">/ 1</span><button id="nextPage" aria-label="다음 페이지">›</button><button id="zoomOut" aria-label="축소">−</button><output id="zoomValue" class="zoom-value">100%</output><button id="zoomIn" aria-label="확대">+</button><button id="fitPage">폭 맞춤</button><button id="newNote">새 노트</button></div></div>
+  <div id="viewport" class="viewport"><div id="paperShell" class="paper-shell"><div id="paper" class="paper"><canvas id="pdfCanvas" aria-label="원본 PDF"></canvas><canvas id="inkCanvas" aria-label="필기 캔버스"></canvas><div id="emptyHint"><span class="hint-icon"><svg class="icon" style="width:29px;height:29px"><use href="#i-pen"/></svg></span><h1>생각이 흐르는 대로</h1><p>마우스로 바로 써 보세요.<br>펜을 연결하면 손끝의 필기가 이곳에 이어집니다.</p></div><div id="cursor"></div></div></div></div>
+  <footer class="bottom-status"><span id="activity" class="pill">준비됨</span><span id="inputLabel">마우스 / 펜 입력</span><span class="spacer"></span><span id="strokeCount">0개 작업</span><span id="saveState">저장할 필기 없음</span></footer>
+ </section>
+ <aside class="sidebar" aria-label="연결 및 센서 설정">
+  <div class="section-head"><h2>장치 연결</h2><small>115200 · 8N1</small></div>
+  <div class="devices"><div class="device"><div class="device-top"><span>Arduino Uno · STM32 경유</span><span id="arduinoBadge" class="pill">오프라인</span></div><div class="device-line"><span id="arduinoState">버튼 · RGB LED</span><span>UART · 19200</span></div></div><div class="device"><div class="device-top"><span>STM32 #3</span><span id="stmBadge" class="pill">오프라인</span></div><div class="device-line"><span id="stmState">좌표 · 압력 데이터</span><button id="disconnectSTM" disabled>연결 해제</button></div></div></div>
+  <div class="mode-card"><div class="mode-top"><span style="font-size:.8rem">현재 모드</span><span id="modeValue" class="mode-value">PEN</span></div><small id="modeHelp">상단 도구 또는 단축키 P / E로 전환합니다.</small></div>
+  <div class="section-head"><h2>실시간 센서</h2><small id="sensorAge">수신 대기</small></div>
+  <div class="telemetry"><div class="datum"><label>X</label><output id="valueX">—</output></div><div class="datum"><label>Y</label><output id="valueY">—</output></div><div class="datum"><label>압력</label><output id="valuePressure">—</output></div></div><progress id="pressureBar" max="1" value="0" aria-label="보정된 압력"></progress>
+  <div class="signal-row"><span id="touchSignal" class="signal">TOUCH</span><span id="pressSignal" class="signal">PRESS</span><span id="drawSignal" class="signal">DRAW</span><span id="staleSignal" class="signal">STALE</span></div>
+  <div class="counts"><div class="count">패킷 번호<strong id="seqValue">—</strong></div><div class="count">정상 수신<strong id="goodCount">0</strong></div><div class="count">CRC 오류<strong id="crcCount">0</strong></div><div class="count">누락 추정<strong id="missingCount">0</strong></div></div><p id="extraStats" class="small-note">실제 장치와 데모의 수신 통계는 분리됩니다.</p>
+  <details><summary>좌표 · 필압 보정</summary><form id="calibrationForm">
+   <label class="pair-label">X 원시 범위 (최소 / 최대)</label><div class="number-pair"><input id="xMin" type="number" min="0" max="65535" value="0" aria-label="X 최소"><input id="xMax" type="number" min="0" max="65535" value="4095" aria-label="X 최대"></div>
+   <label class="pair-label">Y 원시 범위 (최소 / 최대)</label><div class="number-pair"><input id="yMin" type="number" min="0" max="65535" value="0" aria-label="Y 최소"><input id="yMax" type="number" min="0" max="65535" value="4095" aria-label="Y 최대"></div>
+   <label class="check"><input id="swapAxes" type="checkbox"> X / Y 축 교환 (정규화 후)</label><label class="check"><input id="invertX" type="checkbox"> 표시 X 방향 반전</label><label class="check"><input id="invertY" type="checkbox"> 표시 Y 방향 반전</label>
+   <label class="pair-label">압력 범위 (최소 / 최대)</label><div class="number-pair"><input id="pMin" type="number" min="0" max="65535" value="500" aria-label="압력 최소"><input id="pMax" type="number" min="0" max="65535" value="2800" aria-label="압력 최대"></div>
+   <label class="check"><input id="pressureEnabled" type="checkbox" checked> 필압으로 펜 굵기 조절</label><div class="field"><label for="eraserWidth">지우개 지름 (pt)</label><input id="eraserWidth" type="number" min="2" max="150" value="24"></div><div class="field"><label for="staleMs">수신 중단 기준 (ms)</label><input id="staleMs" type="number" min="50" max="5000" value="250"></div><div class="field"><label for="smoothing">좌표 반영 비율</label><input id="smoothing" type="number" min="0.1" max="1" step="0.05" value="1"></div><div class="field"><label for="jumpLimit">급격한 이동 제한 (%)</label><input id="jumpLimit" type="number" min="1" max="100" value="25"></div><div class="field"><label for="sensorMapping">센서 매핑</label><select id="sensorMapping"><option value="page">현재 페이지 전체</option><option value="view">현재 보이는 영역</option></select></div>
+   <button class="primary wide" type="submit">보정값 적용</button><p class="small-note">좌표는 #1이 0–4095로 보냅니다. 압력 500–2800은 #3 기본값이니 실제 FSR 값에 맞춰 변경하세요. 좌표 필터는 #1에서 하므로 반영 비율 1(끔)이 기본입니다.</p></form>
+  </details>
+  <details id="demoDetails"><summary>장치 없이 테스트</summary><p class="small-note">가상 데이터도 SENSOR 바이너리로 만들어 실제 수신과 같은 파서를 통과합니다.</p><label class="check"><input id="demoAuto" type="checkbox" checked> 자동 곡선 · 필압 변화</label><div class="field"><label for="demoX">X 위치</label><input type="range" id="demoX" min="0" max="4095" value="2048"></div><div class="field"><label for="demoY">Y 위치</label><input type="range" id="demoY" min="0" max="4095" value="2048"></div><div class="field"><label for="demoPressure">압력</label><input type="range" id="demoPressure" min="0" max="4095" value="2000"></div><label class="check"><input id="demoTouch" type="checkbox" checked> TOUCH = 1</label><label class="check"><input id="demoPress" type="checkbox" checked> PRESS = 1</label><label class="check"><input id="demoDraw" type="checkbox" checked> DRAW flag = 1</label><label class="check"><input id="demoStale" type="checkbox"> TOUCH_STALE flag = 1</label><div class="field"><label for="demoMode">가상 Arduino 모드</label><select id="demoMode"><option value="PEN">PEN</option><option value="ERASER">ERASER</option></select></div><label class="check"><input id="demoModeStale" type="checkbox"> MODE_STALE (0x20)</label><label class="check"><input id="demoMute" type="checkbox"> MUTE (0x40)</label><label class="check"><input id="demoSplit" type="checkbox" checked> 분할 수신 (3 / 4 / 8바이트)</label><div class="button-row"><button id="demoStart">데모 시작</button><button id="demoStop" disabled>정지</button></div><div class="button-row"><button id="demoCrc">CRC 오류 주입</button><button id="demoPause">수신 중단 테스트</button></div><p id="demoStatus" class="small-note">가상 STM32 대기 중</p><button id="selfTest" class="wide">자동 검증 실행</button><pre id="testResults" class="test-result" aria-live="polite"></pre></details>
+  <details id="logDetails"><summary>통신 로그</summary><div class="button-row"><button id="clearLog">로그 지우기</button><button id="saveLog">로그 저장</button></div><div id="log" class="log" role="log" aria-label="통신 로그"></div></details>
+ </aside>
+</main>
+<input type="file" id="pdfInput" accept="application/pdf,.pdf" hidden>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script id="smartink-core">
+'use strict';
+// ===== 사용자 설정: 통신 규격은 제공된 명세를 유지합니다. =====
+const CONFIG = Object.freeze({
+  BAUD_RATE:115200, MAX_PAYLOAD:32, SENSOR_TYPE:0x10, SENSOR_LENGTH:10,
+  PARTIAL_TIMEOUT_MS:150, STALE_MS:250, MODE_TIMEOUT_MS:200,
+  DEMO_INTERVAL_MS:20, MAX_LOG_LINES:240,
+  GAP_MS:80, GAP_PACKETS:5,   // 80ms 이하 / 패킷 5개 이하 끊김은 같은 획으로 이어 그림 MAX_PDF_BYTES:100*1024*1024,
+  MAX_CANVAS_PIXELS:16*1024*1024, MAX_CANVAS_SIDE:8192, EXPORT_SCALE:2,
+  PDFJS_VERSION:'5.6.205', PDFLIB_VERSION:'1.17.1',
+  PDFJS_URL:'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.6.205/build/pdf.mjs',
+  PDFJS_WORKER:'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.6.205/build/pdf.worker.mjs',
+  PDFJS_ASSETS:'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.6.205/',
+  PDFLIB_URL:'https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js'
+});
+const FLAG = Object.freeze({DRAW:1,TOUCH_STALE:2,PRESS_STALE:4,RX_ERROR:8,ERASER:16,MODE_STALE:32,MUTE:64});
+const DEFAULT_CAL = Object.freeze({xMin:0,xMax:4095,yMin:0,yMax:4095,pMin:500,pMax:2800,swapAxes:false,invertX:false,invertY:false,pressureEnabled:true,eraserWidth:24,staleMs:250,smoothing:1,jumpLimit:25,sensorMapping:'page'});
+const clamp = (v,lo,hi)=>Math.min(hi,Math.max(lo,v));
+const nowMs = ()=>performance.now();
+
+// CRC-8/SMBUS와 같은 파라미터: poly=07, init=00, refin=false, xorout=00.
+function crc8(bytes){let crc=0;for(const b of bytes){crc^=b;for(let i=0;i<8;i++)crc=(crc&0x80)?((crc<<1)^0x07)&255:(crc<<1)&255;}return crc;}
+function encodeSensor(s){
+ const b=new Uint8Array(15);b.set([0xaa,0x55,CONFIG.SENSOR_TYPE,10,s.seq&255]);
+ const v=new DataView(b.buffer);v.setUint16(5,s.x,true);v.setUint16(7,s.y,true);v.setUint16(9,s.pressure,true);b[11]=s.press;b[12]=s.touch;b[13]=s.flags;b[14]=crc8(b.subarray(2,14));return b;
+}
+function canDraw(s){return s.touch===1&&s.press===1&&(s.flags&FLAG.DRAW)!==0&&(s.flags&(FLAG.TOUCH_STALE|FLAG.PRESS_STALE|FLAG.MODE_STALE))===0;}
+function modeFromSensor(s){return (s.flags&FLAG.MODE_STALE)?null:(s.flags&FLAG.ERASER)?'ERASER':'PEN';}
+function mapSensor(s,cal,width,height){let x=clamp((s.x-cal.xMin)/(cal.xMax-cal.xMin),0,1),y=clamp((s.y-cal.yMin)/(cal.yMax-cal.yMin),0,1);if(cal.swapAxes)[x,y]=[y,x];if(cal.invertX)x=1-x;if(cal.invertY)y=1-y;return {x:x*width,y:y*height};}
+function pressureRatio(p,cal){return clamp((p-cal.pMin)/(cal.pMax-cal.pMin),0,1);}
+function pressureWidth(base,p,enabled){return enabled?base*(.35+1.65*clamp(p,0,1)):base;}
+
+class SensorParser{
+ constructor(onSensor=()=>{},onFault=()=>{}){this.onSensor=onSensor;this.onFault=onFault;this.reset();}
+ reset(){this.buffer=[];this.lastByteAt=0;this.lastSeq=null;this.stats={good:0,crc:0,missing:0,invalid:0,duplicates:0,resets:0,unknown:0};}
+ expire(time=nowMs()){if(this.buffer.length&&time-this.lastByteAt>CONFIG.PARTIAL_TIMEOUT_MS){this.buffer=[];this.stats.invalid++;this.onFault('미완성 프레임 시간 초과');}}
+ feed(chunk,time=nowMs()){
+  this.expire(time);this.lastByteAt=time;
+  // 바이트마다 처리하므로 대량 잡음에도 버퍼가 최대 프레임 길이 정도로 제한됩니다.
+  for(const byte of chunk){this.buffer.push(byte);this.parse();}
+ }
+ parse(){const b=this.buffer;while(b.length){
+  if(b[0]!==0xaa){b.shift();continue;}if(b.length<2)return;
+  if(b[1]!==0x55){b.shift();continue;}if(b.length<4)return;
+  const type=b[2],len=b[3];
+  if(len>CONFIG.MAX_PAYLOAD||(type===CONFIG.SENSOR_TYPE&&len!==CONFIG.SENSOR_LENGTH)){
+   this.stats.invalid++;this.onFault('잘못된 TYPE/LEN 조합');b.shift();continue;
+  }
+  const size=5+len;if(b.length<size)return;
+  if(crc8(b.slice(2,4+len))!==b[4+len]){this.stats.crc++;this.onFault('CRC 오류');b.shift();continue;}
+  const p=b.slice(4,4+len);b.splice(0,size);
+  if(type!==CONFIG.SENSOR_TYPE){this.stats.unknown++;continue;}
+  const s={seq:p[0],x:p[1]|p[2]<<8,y:p[3]|p[4]<<8,pressure:p[5]|p[6]<<8,press:p[7],touch:p[8],flags:p[9]};
+  if(s.press>1||s.touch>1){this.stats.invalid++;this.onFault('touch/press는 0 또는 1이어야 함');continue;}
+  this.stats.good++;
+  let discontinuity=false,gap=0;
+  if(this.lastSeq!==null){const delta=(s.seq-this.lastSeq+256)&255;
+   if(delta===0){this.stats.duplicates++;continue;}
+   if(delta>1&&delta<128){this.stats.missing+=delta-1;discontinuity=true;gap=delta-1;}
+   else if(delta>=128){this.stats.resets++;discontinuity=true;gap=999;}
+  }
+  this.lastSeq=s.seq;this.onSensor(s,{discontinuity,gap});
+ }}
+}
+
+// 캔버스는 표시 장치이고 원본은 페이지 좌표의 작업 목록입니다.
+// 지우개 작업도 저장하여 다시 그리기/Undo/내보내기에 같은 결과를 사용합니다.
+function drawPiece(ctx,op,a,b=a){
+ ctx.globalCompositeOperation=op.tool==='ERASER'?'destination-out':'source-over';ctx.fillStyle=op.color||'#000';
+ const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),ra=a.w/2,rb=b.w/2;
+ ctx.beginPath();ctx.arc(a.x,a.y,ra,0,Math.PI*2);ctx.fill();
+ if(d>.001){const nx=-dy/d,ny=dx/d;ctx.beginPath();ctx.moveTo(a.x+nx*ra,a.y+ny*ra);ctx.lineTo(b.x+nx*rb,b.y+ny*rb);ctx.lineTo(b.x-nx*rb,b.y-ny*rb);ctx.lineTo(a.x-nx*ra,a.y-ny*ra);ctx.closePath();ctx.fill();ctx.beginPath();ctx.arc(b.x,b.y,rb,0,Math.PI*2);ctx.fill();}
+ ctx.globalCompositeOperation='source-over';
+}
+function replayInk(ctx,ops,width,height){ctx.clearRect(0,0,width,height);for(const op of ops){if(op.tool==='CLEAR'){ctx.clearRect(0,0,width,height);continue;}if(!op.points.length)continue;drawPiece(ctx,op,op.points[0]);for(let i=1;i<op.points.length;i++)drawPiece(ctx,op,op.points[i-1],op.points[i]);}}
+function canvasScale(w,h,desired){return Math.min(desired,CONFIG.MAX_CANVAS_SIDE/w,CONFIG.MAX_CANVAS_SIDE/h,Math.sqrt(CONFIG.MAX_CANVAS_PIXELS/(w*h)));}
+function createInkCanvas(page,desired=CONFIG.EXPORT_SCALE){const scale=canvasScale(page.width,page.height,desired),c=document.createElement('canvas');c.width=Math.max(1,Math.ceil(page.width*scale));c.height=Math.max(1,Math.ceil(page.height*scale));const ctx=c.getContext('2d');ctx.scale(c.width/page.width,c.height/page.height);replayInk(ctx,page.ops,page.width,page.height);return c;}
+function inverseAffine(m){const [a,b,c,d,e,f]=m,det=a*d-b*c;if(!det)throw Error('잘못된 페이지 변환');return [d/det,-b/det,-c/det,a/det,(c*f-d*e)/det,(b*e-a*f)/det];}
+function overlayMatrix(page){const [a,b,c,d,e,f]=inverseAffine(page.transform);return [a*page.width,b*page.width,-c*page.height,-d*page.height,c*page.height+e,d*page.height+f];}
+
+class SerialChannel{
+ constructor(name,onBytes,onState,onLog){this.name=name;this.onBytes=onBytes;this.onState=onState;this.onLog=onLog;this.state='closed';this.port=null;this.reader=null;this.writer=null;this.readTask=null;this.closing=null;this.timers=[];this.writeBusy=false;}
+ setState(s){this.state=s;this.onState(s);}
+ async connect(serialApi,other){
+  if(this.state!=='closed')return false;this.setState('opening');let selected,opened=false;
+  try{selected=await serialApi.requestPort();if(other?.port===selected)throw Error('다른 장치에 이미 연결한 포트입니다. 서로 다른 COM 포트를 선택하세요.');
+   this.port=selected;await selected.open({baudRate:CONFIG.BAUD_RATE,dataBits:8,stopBits:1,parity:'none',flowControl:'none',bufferSize:4096});opened=true;
+   this.writer=selected.writable?selected.writable.getWriter():null;this.setState('open');this.onLog(`${this.name} 연결 완료`,'ok');
+   this.readTask=this.readLoop();this.readTask.then(()=>{if(this.state==='open')void this.disconnect('수신 스트림 종료');});return true;
+  }catch(e){if(opened)try{await selected.close();}catch(_){}this.port=null;this.writer=null;this.setState('closed');if(e.name==='NotFoundError')this.onLog(`${this.name} 포트 선택 취소`);else this.onLog(`${this.name}: ${e.message} · 포트와 시리얼 모니터를 확인하세요.`,'error');return false;}
+ }
+ async readLoop(){try{while(this.state==='open'&&this.port?.readable){this.reader=this.port.readable.getReader();try{while(this.state==='open'){const {value,done}=await this.reader.read();if(done)return;if(value)this.onBytes(value);}}finally{this.reader.releaseLock();this.reader=null;}}}catch(e){if(this.state==='open')this.onLog(`${this.name} 수신 오류: ${e.message}`,'error');}}
+ async writeLine(line){if(this.state!=='open'||!this.writer||this.writeBusy)return;this.writeBusy=true;let timer;try{await Promise.race([this.writer.write(new TextEncoder().encode(line)),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('송신 시간 초과')),2000);})]);}catch(e){this.onLog(`${this.name} 송신 오류: ${e.message}`,'error');void this.disconnect('송신 중단');}finally{clearTimeout(timer);this.writeBusy=false;}}
+ later(ms,fn){this.timers.push(setTimeout(()=>{if(this.state==='open')fn();},ms));}
+ async disconnect(reason='사용자 해제'){
+  if(this.closing)return this.closing;if(this.state==='closed'||this.state==='opening')return;
+  this.setState('closing');this.timers.forEach(clearTimeout);this.timers=[];
+  this.closing=(async()=>{try{
+   if(this.reader)try{await this.reader.cancel();}catch(_){}
+   if(this.readTask)await this.readTask;
+   if(this.writer){try{await this.writer.abort();}catch(_){}try{this.writer.releaseLock();}catch(_){}this.writer=null;}
+   if(this.port)try{await this.port.close();}catch(e){this.onLog(`${this.name} 닫기: ${e.message}`,'warn');}
+  }finally{this.port=null;this.readTask=null;this.writeBusy=false;this.setState('closed');this.onLog(`${this.name} 연결 해제 · ${reason}`);}})();
+  try{await this.closing;}finally{this.closing=null;}
+ }
+}
+</script>
+
+<script id="smartink-app">
+'use strict';
+const $=id=>document.getElementById(id),view=$('viewport'),paper=$('paper'),inkCanvas=$('inkCanvas'),pdfCanvas=$('pdfCanvas');
+let cal={...DEFAULT_CAL};
+try{const saved=JSON.parse(localStorage.getItem('smartink-calibration-v2')||'null');if(saved)cal={...cal,...saved};}catch(_){}
+function validCalibration(c){return ['xMin','xMax','yMin','yMax','pMin','pMax'].every(k=>Number.isFinite(c[k])&&c[k]>=0&&c[k]<=65535)&&c.xMax>c.xMin&&c.yMax>c.yMin&&c.pMax>c.pMin&&c.eraserWidth>=2&&c.eraserWidth<=150&&c.staleMs>=50&&c.staleMs<=5000&&c.smoothing>=.1&&c.smoothing<=1&&c.jumpLimit>=1&&c.jumpLimit<=100&&['page','view'].includes(c.sensorMapping);}
+if(!validCalibration(cal))cal={...DEFAULT_CAL};
+const app={mode:'PEN',source:'mouse',pan:false,space:false,zoom:1,page:1,pages:new Map(),pdf:null,pdfBytes:null,name:'새 노트',pageTotal:1,active:null,history:[],redo:[],revision:0,savedRevision:0,busy:false,renderToken:0,pointer:null,panDrag:null,inkScale:1,modeAt:0,lastSamples:{sensor:null,demo:null},lastAt:{sensor:0,demo:0},watchdogExpired:{sensor:false,demo:false},logLines:[],demo:{running:false,paused:false,seq:0,t:0,corrupt:false,timer:null,generation:0}};
+let toastTimer,uiQueued=false,pdfjs=null,pdfLibPromise=null,pdfjsPromise=null,loadingTask=null;
+function notePage(){return {width:841.89,height:473.56,transform:[1,0,0,-1,0,473.56],ops:[],proxy:null};}
+app.pages.set(1,notePage());
+const currentPage=()=>app.pages.get(app.page);
+function toast(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4500);}
+function log(message,level='info'){const line=`${new Date().toLocaleTimeString('ko-KR',{hour12:false})}  ${message}`;app.logLines.push(line);if(app.logLines.length>CONFIG.MAX_LOG_LINES)app.logLines.shift();const row=document.createElement('div');row.textContent=line;row.className=level;$('log').append(row);while($('log').children.length>CONFIG.MAX_LOG_LINES)$('log').firstChild.remove();$('log').scrollTop=$('log').scrollHeight;}
+function handleError(e){console.error(e);log(e.message||String(e),'error');toast(e.message||String(e));}
+function safely(fn){return (...args)=>{try{Promise.resolve(fn(...args)).catch(handleError);}catch(e){handleError(e);}};}
+function markChanged(){app.revision++;scheduleUI();}
+function setBusy(b,label='처리 중'){app.busy=b;paper.classList.toggle('busy',b);if(b){finishStroke();$('activity').textContent=label;}scheduleUI();}
+function setMode(mode,origin='web'){
+ if(mode!=='PEN'&&mode!=='ERASER')return;
+ if(origin==='web'&&(stm.state==='open'&&app.source!=='demo'||app.source!=='mouse')){toast('실제 장치는 Arduino 버튼, 데모는 가상 모드 선택을 사용하세요.');return;}
+ if(app.mode!==mode){finishStroke();app.mode=mode;log(`모드 ${mode} · ${origin==='sensor'?'STM32 SENSOR':origin==='demo'?'가상 SENSOR':'화면'}`);}
+ if(origin==='sensor'||origin==='demo')app.modeAt=nowMs();scheduleUI();
+}
+function setSource(source){finishStroke();hideCursor();app.source=source;$('inputSource').value=source;if(source!=='demo'&&app.demo.running)stopDemo();scheduleUI();}
+function sensorFault(source,message){if(app.source===source)finishStroke();const count=parsers[source].stats.crc+parsers[source].stats.invalid;if(count<=5||count%100===0)log(`${source==='demo'?'DEMO':'STM32'} ${message} (오류 ${count})`,'warn');scheduleUI();}
+function receiveSensor(source,s,meta){
+ const time=nowMs();app.lastSamples[source]=s;app.lastAt[source]=time;app.watchdogExpired[source]=false;
+ // MODE_STALE 때는 오래된 ERASER 비트를 적용하지 않고 마지막 표시만 유지합니다.
+ const nextMode=modeFromSensor(s);
+ if(nextMode!==null&&((source==='demo'&&app.source==='demo')||(source==='sensor'&&app.source!=='demo')))setMode(nextMode,source);
+ if(app.source!==source){scheduleUI();return;}
+ if(meta.discontinuity&&meta.gap>CONFIG.GAP_PACKETS){finishStroke();log('seq 불연속: 획을 분리했습니다.','warn');}
+ if(app.busy||app.pan||app.space||document.hidden){clearGap();finishStroke();hideCursor();scheduleUI();return;}
+ if(!canDraw(s)){if(app.active&&!app.gapTimer)app.gapTimer=setTimeout(()=>{app.gapTimer=null;finishStroke();hideCursor();scheduleUI();},CONFIG.GAP_MS);scheduleUI();return;}
+ clearGap();
+ const page=currentPage();if(!page)return;
+ let point=mapSensor(s,cal,page.width,page.height);
+ if(cal.sensorMapping==='view'){
+  const r=paper.getBoundingClientRect(),v=view.getBoundingClientRect();
+  const x0=clamp((v.left-r.left)/r.width*page.width,0,page.width),x1=clamp((v.right-r.left)/r.width*page.width,0,page.width);
+  const y0=clamp((v.top-r.top)/r.height*page.height,0,page.height),y1=clamp((v.bottom-r.top)/r.height*page.height,0,page.height);
+  point={x:x0+point.x/page.width*(x1-x0),y:y0+point.y/page.height*(y1-y0)};
+ }
+ const w=app.mode==='ERASER'?cal.eraserWidth:pressureWidth(+$('penWidth').value,pressureRatio(s.pressure,cal),cal.pressureEnabled);
+ appendInput({...point,w},source,true);showCursor(point,w);scheduleUI();
+}
+const parsers={sensor:new SensorParser((s,m)=>receiveSensor('sensor',s,m),m=>sensorFault('sensor',m)),demo:new SensorParser((s,m)=>receiveSensor('demo',s,m),m=>sensorFault('demo',m))};
+const stm=new SerialChannel('STM32',b=>parsers.sensor.feed(b),s=>{if(s==='opening'){parsers.sensor.reset();app.lastSamples.sensor=null;app.lastAt.sensor=0;}if(s==='closing'||s==='closed'){if(app.source==='sensor')finishStroke();app.lastAt.sensor=0;app.modeAt=0;hideCursor();}scheduleUI();},log);
+
+function beginStroke(p,source){const page=currentPage(),op={tool:app.mode,color:$('penColor').value,points:[p]};page.ops.push(op);app.active={op,page:app.page,source,lastRaw:p};drawPiece(inkCanvas.getContext('2d'),op,p);$('emptyHint').hidden=true;}
+function appendInput(p,source,smooth){
+ if(app.active&&(app.active.source!==source||app.active.page!==app.page||app.active.op.tool!==app.mode))finishStroke();
+ if(app.active&&smooth){const lastRaw=app.active.lastRaw,d=Math.hypot(p.x-lastRaw.x,p.y-lastRaw.y),diagonal=Math.hypot(currentPage().width,currentPage().height);
+  if(d>diagonal*cal.jumpLimit/100){finishStroke();}
+ }
+ if(!app.active){beginStroke(p,source);return;}
+ const active=app.active,last=active.op.points.at(-1);active.lastRaw=p;
+ if(smooth){const d=Math.hypot(p.x-last.x,p.y-last.y),alpha=Math.min(1,cal.smoothing+(1-cal.smoothing)*Math.min(d/30,1));p={x:last.x+(p.x-last.x)*alpha,y:last.y+(p.y-last.y)*alpha,w:last.w+(p.w-last.w)*.5};}
+ if(Math.hypot(p.x-last.x,p.y-last.y)<.05&&Math.abs(p.w-last.w)<.03)return;
+ active.op.points.push(p);drawPiece(inkCanvas.getContext('2d'),active.op,last,p);
+}
+function clearGap(){if(app.gapTimer){clearTimeout(app.gapTimer);app.gapTimer=null;}}
+function finishStroke(){clearGap();if(!app.active)return;app.history.push({type:'stroke',page:app.active.page,op:app.active.op});app.redo=[];app.active=null;markChanged();}
+function refreshInk(){const p=currentPage();if(!p)return;const ctx=inkCanvas.getContext('2d');ctx.setTransform(inkCanvas.width/p.width,0,0,inkCanvas.height/p.height,0,0);replayInk(ctx,p.ops,p.width,p.height);$('emptyHint').hidden=!!app.pdf||p.ops.length>0;scheduleUI();}
+function historyStep(redo=false){if(app.busy)return;finishStroke();const from=redo?app.redo:app.history,to=redo?app.history:app.redo,action=from.pop();if(!action)return;
+ if(action.type==='stroke'){const ops=app.pages.get(action.page).ops;if(redo)ops.push(action.op);else ops.splice(ops.lastIndexOf(action.op),1);}
+ else {for(const item of action.items){const ops=app.pages.get(item.page).ops;if(redo)ops.push(item.op);else ops.splice(ops.lastIndexOf(item.op),1);}}
+ to.push(action);markChanged();refreshInk();
+ if(action.type==='stroke'&&action.page!==app.page)void changePage(action.page);
+}
+function clearAll(){if(app.busy)return;finishStroke();if(![...app.pages.values()].some(p=>p.ops.length))return;if(!confirm('모든 페이지의 필기를 지울까요? 실행 취소로 복구할 수 있습니다.'))return;const items=[];for(const [page,p]of app.pages){if(p.ops.length){const op={tool:'CLEAR',points:[]};p.ops.push(op);items.push({page,op});}}app.history.push({type:'clear',items});app.redo=[];markChanged();refreshInk();}
+function showCursor(point,w){const c=$('cursor');c.style.display='block';c.style.left=`${point.x*app.zoom}px`;c.style.top=`${point.y*app.zoom}px`;c.style.width=c.style.height=`${Math.max(5,w*app.zoom)}px`;c.classList.toggle('eraser',app.mode==='ERASER');}
+function hideCursor(){$('cursor').style.display='none';}
+function pointerPoint(e){const r=inkCanvas.getBoundingClientRect(),p=currentPage();return {x:clamp((e.clientX-r.left)/r.width*p.width,0,p.width),y:clamp((e.clientY-r.top)/r.height*p.height,0,p.height),w:app.mode==='ERASER'?cal.eraserWidth:pressureWidth(+$('penWidth').value,e.pressure,cal.pressureEnabled&&e.pointerType==='pen')};}
+view.addEventListener('pointerdown',e=>{if(app.pan||app.space||e.button===1){e.preventDefault();finishStroke();app.panDrag={id:e.pointerId,x:e.clientX,y:e.clientY,sx:view.scrollLeft,sy:view.scrollTop};view.setPointerCapture(e.pointerId);view.classList.add('panning');}},true);
+view.addEventListener('pointermove',e=>{const p=app.panDrag;if(p&&p.id===e.pointerId){view.scrollLeft=p.sx-(e.clientX-p.x);view.scrollTop=p.sy-(e.clientY-p.y);}});
+function finishPointer(e){if(app.pointer===e.pointerId){finishStroke();app.pointer=null;}if(app.panDrag?.id===e.pointerId){app.panDrag=null;view.classList.remove('panning');}}
+view.addEventListener('pointerup',finishPointer);view.addEventListener('pointercancel',finishPointer);view.addEventListener('lostpointercapture',finishPointer);
+inkCanvas.addEventListener('pointerdown',e=>{if(app.busy||app.panDrag||app.source!=='mouse'||e.button!==0||app.pointer!==null)return;e.preventDefault();app.pointer=e.pointerId;inkCanvas.setPointerCapture(e.pointerId);appendInput(pointerPoint(e),'mouse',false);});
+inkCanvas.addEventListener('pointermove',e=>{if(app.source!=='mouse'||app.busy||app.pan||app.space||app.panDrag)return;const p=pointerPoint(e);showCursor(p,p.w);if(app.pointer!==e.pointerId)return;if((e.buttons&1)===0){finishPointer(e);return;}const events=e.getCoalescedEvents?.();for(const q of events?.length?events:[e])appendInput(pointerPoint(q),'mouse',false);});
+inkCanvas.addEventListener('pointerleave',()=>{if(app.pointer===null)hideCursor();});
+window.addEventListener('blur',()=>{finishStroke();app.pointer=null;app.space=false;app.panDrag=null;view.classList.remove('panning');});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){finishStroke();app.pointer=null;hideCursor();}});
+
+// PDF 라이브러리는 필요할 때 로드합니다. CDN 실패해도 기본 필기/시리얼은 동작합니다.
+async function ensurePDFJS(){if(!pdfjsPromise)pdfjsPromise=import(CONFIG.PDFJS_URL).then(lib=>{pdfjs=lib;pdfjs.GlobalWorkerOptions.workerSrc=CONFIG.PDFJS_WORKER;return lib;}).catch(e=>{pdfjsPromise=null;throw Error('PDF.js를 불러오지 못했습니다. 인터넷/CDN 접근을 확인하세요. '+e.message);});return pdfjsPromise;}
+async function ensurePDFLib(){if(window.PDFLib)return window.PDFLib;if(!pdfLibPromise)pdfLibPromise=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=CONFIG.PDFLIB_URL;script.onload=()=>window.PDFLib?resolve(window.PDFLib):reject(Error('pdf-lib 초기화 실패'));script.onerror=()=>{script.remove();pdfLibPromise=null;reject(Error('pdf-lib를 불러오지 못했습니다. 인터넷/CDN 접근을 확인하세요.'));};document.head.append(script);});return pdfLibPromise;}
+function pdfOptions(data){return {data:data.slice(),isEvalSupported:false,enableXfa:false,cMapUrl:CONFIG.PDFJS_ASSETS+'cmaps/',cMapPacked:true,standardFontDataUrl:CONFIG.PDFJS_ASSETS+'standard_fonts/',wasmUrl:CONFIG.PDFJS_ASSETS+'wasm/'};}
+async function getPageData(n){if(app.pages.has(n))return app.pages.get(n);const proxy=await app.pdf.getPage(n),v=proxy.getViewport({scale:1});const p={width:v.width,height:v.height,transform:[...v.transform],ops:[],proxy};app.pages.set(n,p);return p;}
+function resizePaper(){const p=currentPage();paper.style.width=`${p.width*app.zoom}px`;paper.style.height=`${p.height*app.zoom}px`;const scale=canvasScale(p.width,p.height,app.zoom*Math.min(devicePixelRatio||1,2));inkCanvas.width=Math.ceil(p.width*scale);inkCanvas.height=Math.ceil(p.height*scale);refreshInk();$('zoomValue').textContent=`${Math.round(app.zoom*100)}%`;}
+async function renderPage(){const token=++app.renderToken,p=currentPage();
+ // 빠른 Zoom 입력에서는 이전 표시용 PDF 렌더링을 취소해 중복 메모리를 줄입니다.
+ if(app.renderTask)app.renderTask.cancel();
+ resizePaper();const scale=canvasScale(p.width,p.height,app.zoom*Math.min(devicePixelRatio||1,2)),off=document.createElement('canvas');off.width=Math.max(1,Math.ceil(p.width*scale));off.height=Math.max(1,Math.ceil(p.height*scale));const ctx=off.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,off.width,off.height);
+ if(p.proxy){const viewport=p.proxy.getViewport({scale:1}),task=p.proxy.render({canvasContext:ctx,viewport,transform:[off.width/p.width,0,0,off.height/p.height,0,0],annotationMode:pdfjs.AnnotationMode.ENABLE});app.renderTask=task;try{await task.promise;}catch(e){if(e.name==='RenderingCancelledException'||token!==app.renderToken)return;throw e;}finally{if(app.renderTask===task)app.renderTask=null;}}
+ if(token!==app.renderToken)return;pdfCanvas.width=off.width;pdfCanvas.height=off.height;pdfCanvas.getContext('2d').drawImage(off,0,0);$('emptyHint').hidden=!!app.pdf||p.ops.length>0;scheduleUI();
+}
+async function changePage(n){n=clamp(Math.round(Number(n)||1),1,app.pageTotal);if(app.busy||n===app.page)return;setBusy(true,'페이지 준비');try{await getPageData(n);app.page=n;await renderPage();view.scrollTop=0;view.scrollLeft=0;}finally{setBusy(false);}}
+async function setZoom(value,fit=false){if(app.busy)return;finishStroke();hideCursor();const p=currentPage(),r=paper.getBoundingClientRect(),v=view.getBoundingClientRect(),cx=(v.left+v.width/2-r.left)/app.zoom,cy=(v.top+v.height/2-r.top)/app.zoom;app.zoom=clamp(value,.2,4);resizePaper();const nr=paper.getBoundingClientRect();view.scrollLeft+=nr.left+cx*app.zoom-(v.left+v.width/2);view.scrollTop+=nr.top+cy*app.zoom-(v.top+v.height/2);if(fit){view.scrollLeft=0;view.scrollTop=0;}await renderPage();}
+async function fitWidth(){return setZoom((view.clientWidth-(innerWidth<780?40:72))/currentPage().width,true);}
+view.addEventListener('wheel',e=>{if(e.ctrlKey){e.preventDefault();safely(()=>setZoom(app.zoom*(e.deltaY<0?1.1:1/1.1)))();}},{passive:false});
+function hasUnsaved(){return app.revision!==app.savedRevision||!!app.active;}
+async function openPdfFile(file){if(!file||app.busy)return;if(file.size>CONFIG.MAX_PDF_BYTES)throw Error('PDF는 100MB 이하로 열어 주세요.');if(hasUnsaved()&&!confirm('현재 필기를 저장하지 않고 다른 PDF를 열까요?'))return;setBusy(true,'PDF 여는 중');let nextPdf=null;
+ try{await ensurePDFJS();const bytes=new Uint8Array(await file.arrayBuffer());loadingTask=pdfjs.getDocument(pdfOptions(bytes));loadingTask.onPassword=()=>{void loadingTask.destroy();};nextPdf=await loadingTask.promise;const proxy=await nextPdf.getPage(1),v=proxy.getViewport({scale:1});if(!Number.isFinite(v.width)||v.width<=0||!Number.isFinite(v.height)||v.height<=0)throw Error('PDF 페이지 크기를 읽지 못했습니다.');
+  if(app.pdf)await app.pdf.destroy();app.pdf=nextPdf;nextPdf=null;app.pdfBytes=bytes;app.name=file.name;app.page=1;app.pageTotal=app.pdf.numPages;app.pages=new Map([[1,{width:v.width,height:v.height,transform:[...v.transform],ops:[],proxy}]]);app.history=[];app.redo=[];app.revision=app.savedRevision=0;app.zoom=clamp((view.clientWidth-72)/v.width,.2,2);await renderPage();view.scrollTop=view.scrollLeft=0;log(`PDF 열기 · ${file.name} · ${app.pageTotal}페이지`,'ok');
+ }catch(e){if(nextPdf)await nextPdf.destroy();throw Error('PDF 열기 실패: '+e.message+' (암호화 PDF는 지원하지 않습니다.)');}finally{loadingTask=null;setBusy(false);$('pdfInput').value='';}}
+async function newNote(){if(app.busy)return;if(hasUnsaved()&&!confirm('현재 필기를 저장하지 않고 새 노트를 만들까요?'))return;setBusy(true);try{if(app.pdf)await app.pdf.destroy();app.pdf=null;app.pdfBytes=null;app.name='새 노트';app.page=app.pageTotal=1;app.pages=new Map([[1,notePage()]]);app.history=[];app.redo=[];app.revision=app.savedRevision=0;app.zoom=clamp((view.clientWidth-72)/currentPage().width,.2,2);await renderPage();view.scrollTop=view.scrollLeft=0;}finally{setBusy(false);}}
+function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
+const outputName=suffix=>(app.name.replace(/\.pdf$/i,'')||'SMART_INK')+suffix;
+async function canvasBlob(c){return new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(Error('이미지 생성 실패')),'image/png'));}
+async function exportPng(){if(app.busy)return;setBusy(true,'PNG 저장 중');try{const p=currentPage(),ink=createInkCanvas(p),c=document.createElement('canvas');c.width=ink.width;c.height=ink.height;const ctx=c.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,c.width,c.height);if(p.proxy)await p.proxy.render({canvasContext:ctx,viewport:p.proxy.getViewport({scale:1}),transform:[c.width/p.width,0,0,c.height/p.height,0,0],annotationMode:pdfjs.AnnotationMode.ENABLE}).promise;ctx.drawImage(ink,0,0);downloadBlob(await canvasBlob(c),outputName(`_page${app.page}.png`));toast('현재 페이지 전체를 PNG로 저장했습니다.');}finally{setBusy(false);}}
+async function buildPdfBytes(original,pages){const lib=await ensurePDFLib(),doc=original?await lib.PDFDocument.load(original.slice()):await lib.PDFDocument.create();if(!original){const p=pages.get(1);doc.addPage([p.width,p.height]);}
+ for(const [n,p]of pages){if(!p.ops.length)continue;const ink=createInkCanvas(p),img=await doc.embedPng(await (await canvasBlob(ink)).arrayBuffer()),target=doc.getPage(n-1),m=overlayMatrix(p);
+  // PDF.js viewport의 역변환: CropBox/회전/UserUnit을 포함해 정확히 되돌립니다.
+  target.pushOperators(lib.pushGraphicsState(),lib.concatTransformationMatrix(...m));target.drawImage(img,{x:0,y:0,width:1,height:1});target.pushOperators(lib.popGraphicsState());
+ }
+ return doc.save();
+}
+async function exportPdf(){if(app.busy)return;setBusy(true,'PDF 저장 중');try{const bytes=await buildPdfBytes(app.pdfBytes,app.pages);downloadBlob(new Blob([bytes],{type:'application/pdf'}),outputName('_annotated.pdf'));app.savedRevision=app.revision;log('PDF 저장 완료 · 원본 유지, 현재 필기 합성','ok');toast('필기가 포함된 새 PDF를 저장했습니다.');}finally{setBusy(false);}}
+
+function demoTick(){const d=app.demo;if(!d.running||d.paused)return;d.t+=CONFIG.DEMO_INTERVAL_MS/1000;let x=+$('demoX').value,y=+$('demoY').value,pressure=+$('demoPressure').value;if($('demoAuto').checked){x=Math.round(cal.xMin+(cal.xMax-cal.xMin)*(.5+.29*Math.sin(d.t)));y=Math.round(cal.yMin+(cal.yMax-cal.yMin)*(.5+.18*Math.sin(2*d.t)));pressure=Math.round(cal.pMin+(cal.pMax-cal.pMin)*(.5+.48*Math.sin(d.t*1.4)));$('demoX').value=x;$('demoY').value=y;$('demoPressure').value=pressure;}
+ const flags=($('demoDraw').checked&&!$('demoModeStale').checked?FLAG.DRAW:0)|($('demoStale').checked?FLAG.TOUCH_STALE:0)|($('demoMode').value==='ERASER'?FLAG.ERASER:0)|($('demoModeStale').checked?FLAG.MODE_STALE:0)|($('demoMute').checked?FLAG.MUTE:0),frame=encodeSensor({seq:d.seq++,x,y,pressure,touch:+$('demoTouch').checked,press:+$('demoPress').checked,flags});if(d.corrupt){frame[14]^=0x80;d.corrupt=false;}
+ if($('demoSplit').checked){parsers.demo.feed(frame.subarray(0,3));parsers.demo.feed(frame.subarray(3,7));parsers.demo.feed(frame.subarray(7));}else parsers.demo.feed(frame);
+}
+function startDemo(){if(app.demo.running)return;setSource('demo');parsers.demo.reset();app.lastAt.demo=0;app.lastSamples.demo=null;Object.assign(app.demo,{running:true,paused:false,seq:0,t:0,corrupt:false});app.demo.timer=setInterval(demoTick,CONFIG.DEMO_INTERVAL_MS);demoTick();log('가상 STM32 시작 · 50 Hz','ok');scheduleUI();}
+function stopDemo(){clearInterval(app.demo.timer);app.demo.running=false;app.demo.paused=false;app.demo.timer=null;finishStroke();hideCursor();scheduleUI();}
+function applyCalToUI(){for(const [key,value]of Object.entries(cal)){const el=$(key);if(!el)continue;if(el.type==='checkbox')el.checked=value;else el.value=value;}for(const [id,min,max]of [['demoX',cal.xMin,cal.xMax],['demoY',cal.yMin,cal.yMax],['demoPressure',cal.pMin,cal.pMax]]){$(id).min=min;$(id).max=max;$(id).value=clamp(+$(id).value,min,max);}}
+function applyCalibration(e){e.preventDefault();const next={};for(const key of Object.keys(DEFAULT_CAL)){const el=$(key);next[key]=el.type==='checkbox'?el.checked:el.tagName==='SELECT'?el.value:Number(el.value);}if(!validCalibration(next)){toast('보정값을 확인하세요. 최대값은 최소값보다 커야 합니다.');return;}finishStroke();cal=next;try{localStorage.setItem('smartink-calibration-v2',JSON.stringify(cal));}catch(_){}applyCalToUI();toast('좌표와 필압 보정값을 적용했습니다.');}
+function scheduleUI(){if(uiQueued)return;uiQueued=true;requestAnimationFrame(()=>{uiQueued=false;updateUI();});}
+function updateUI(){
+ const sampleSource=app.source==='demo'?'demo':'sensor',latest=app.lastSamples[sampleSource],stamp=app.lastAt[sampleSource];
+ const linkFresh=!!stamp&&nowMs()-stamp<=cal.staleMs,modeSynced=linkFresh&&latest&&!(latest.flags&FLAG.MODE_STALE);
+ const locked=app.source!=='mouse'||stm.state==='open';
+ $('penBtn').disabled=$('eraserBtn').disabled=locked||app.busy;
+ for(const [id,mode]of [['penBtn','PEN'],['eraserBtn','ERASER']]){$(id).classList.toggle('active',app.mode===mode);$(id).setAttribute('aria-pressed',String(app.mode===mode));}
+ $('modeValue').textContent=app.mode;$('modeValue').style.color=app.mode==='ERASER'?'#ad5900':'#2450c2';
+ $('modeHelp').textContent=locked?(modeSynced?'SENSOR의 ERASER 비트로 동기화 · '+((latest.flags&FLAG.MUTE)?'MUTE 켜짐':'MUTE 꺼짐'):'모드 수신 대기/중단 · 필기 금지, 마지막 모드 표시 유지'):'마우스 테스트: 상단 도구 또는 P / E로 전환합니다.';
+ $('arduinoBadge').textContent=modeSynced?(sampleSource==='demo'?'가상 정상':'간접 정상'):'미확인';$('arduinoBadge').className='pill'+(modeSynced?' good':' warn');
+ $('arduinoState').textContent=modeSynced?'MODE_STALE = 0':linkFresh?'MODE_STALE = 1':'STM32 응답 대기';
+ const state=stm.state;$('stmBadge').textContent={closed:'오프라인',opening:'연결 중',open:'연결됨',closing:'해제 중'}[state];$('stmBadge').className='pill'+(state==='open'?' good':'');
+ $('connectSTM').disabled=state!=='closed'||!('serial'in navigator)||!isSecureContext;$('disconnectSTM').disabled=state!=='open';
+ $('stmState').textContent=state==='open'?'좌표 · 압력 · 모드 통합 수신':'';
+ $('panBtn').classList.toggle('active',app.pan);$('panBtn').setAttribute('aria-pressed',String(app.pan));view.classList.toggle('pan',app.pan||app.space);inkCanvas.style.cursor=app.pan||app.space?'grab':app.mode==='ERASER'?'cell':'crosshair';
+ $('undoBtn').disabled=app.busy||(!app.history.length&&!app.active);$('redoBtn').disabled=app.busy||!app.redo.length;
+ for(const id of ['openPdf','newNote','savePng','savePdf','clearBtn','zoomIn','zoomOut','fitPage','selfTest'])$(id).disabled=app.busy;
+ $('selfTest').disabled=app.busy||!!app.testing;
+ $('prevPage').disabled=app.busy||app.page<=1;$('nextPage').disabled=app.busy||app.page>=app.pageTotal;$('pageNumber').disabled=app.busy;if(document.activeElement!==$('pageNumber'))$('pageNumber').value=app.page;$('pageNumber').max=app.pageTotal;$('pageCount').textContent='/ '+app.pageTotal;
+ $('docName').textContent=app.name;$('docSub').textContent=app.pdf?`PDF · ${app.pageTotal}페이지 · 페이지 좌표에 필기 저장`:'16:9 노트 · 자유롭게 쓰거나 PDF를 열어 보세요';$('widthValue').textContent=$('penWidth').value+' pt';
+ const source=app.source==='demo'?'demo':'sensor',s=app.lastSamples[source],at=app.lastAt[source],age=at?nowMs()-at:Infinity,fresh=age<=cal.staleMs,stats=parsers[source].stats;
+ for(const [id,key]of [['valueX','x'],['valueY','y'],['valuePressure','pressure'],['seqValue','seq']])$(id).textContent=s?s[key]:'—';$('pressureBar').value=s?pressureRatio(s.pressure,cal):0;
+ for(const [id,on]of [['touchSignal',fresh&&s?.touch===1],['pressSignal',fresh&&s?.press===1],['drawSignal',fresh&&!!s&&canDraw(s)],['staleSignal',!!s&&(!fresh||!!(s.flags&(FLAG.TOUCH_STALE|FLAG.PRESS_STALE|FLAG.MODE_STALE)))]])$(id).classList.toggle('on',on);
+ $('sensorAge').textContent=at?(fresh?`${Math.round(age)} ms 전`:'수신 중단'):'수신 대기';$('goodCount').textContent=stats.good;$('crcCount').textContent=stats.crc;$('missingCount').textContent=stats.missing;
+ $('extraStats').textContent=`${source==='demo'?'DEMO':'STM32'} · 비정상 ${stats.invalid} · 중복 ${stats.duplicates} · seq 재동기화 ${stats.resets}`;
+ $('inputLabel').textContent={mouse:'마우스 / 펜 입력',sensor:'STM32 센서 입력',demo:'가상 STM32 입력'}[app.source];$('strokeCount').textContent=`${currentPage()?.ops.length||0}개 작업`;$('saveState').textContent=hasUnsaved()?'저장하지 않은 변경사항':'변경사항 없음';
+ if(!app.busy){$('activity').textContent=app.active?'필기 중':app.source==='mouse'?'준비됨':fresh?'센서 수신 중':'센서 대기';$('activity').className='pill'+(app.active?' good':'');}
+ $('demoStart').disabled=app.demo.running;$('demoStop').disabled=!app.demo.running;$('demoPause').disabled=!app.demo.running;$('demoCrc').disabled=!app.demo.running;$('demoPause').textContent=app.demo.paused?'수신 재개':'수신 중단 테스트';$('demoStatus').textContent=app.demo.running?(app.demo.paused?'전송 중단 · watchdog으로 획이 종료됩니다.':'가상 SENSOR 수신 중 · 가상 모드 선택으로 전환'):'가상 STM32 대기 중';
+}
+setInterval(()=>{const time=nowMs();for(const source of ['sensor','demo']){parsers[source].expire(time);if(app.lastAt[source]&&time-app.lastAt[source]>cal.staleMs&&!app.watchdogExpired[source]){app.watchdogExpired[source]=true;if(app.source===source){finishStroke();hideCursor();log(`${source==='demo'?'DEMO':'STM32'} 수신 중단 · 획 종료`,'warn');}}}scheduleUI();},50);
+function connectSTM(){return stm.connect(navigator.serial).then(ok=>{if(ok)setSource('sensor');});}
+for(const [id,fn]of Object.entries({connectSTM,disconnectSTM:()=>stm.disconnect(),penBtn:()=>setMode('PEN'),eraserBtn:()=>setMode('ERASER'),panBtn:()=>{finishStroke();app.pan=!app.pan;hideCursor();scheduleUI();},undoBtn:()=>historyStep(),redoBtn:()=>historyStep(true),clearBtn:clearAll,openPdf:()=>$('pdfInput').click(),savePdf:exportPdf,savePng:exportPng,prevPage:()=>changePage(app.page-1),nextPage:()=>changePage(app.page+1),zoomIn:()=>setZoom(app.zoom*1.2),zoomOut:()=>setZoom(app.zoom/1.2),fitPage:fitWidth,newNote,demoStart:startDemo,demoStop:stopDemo,demoPause:()=>{app.demo.paused=!app.demo.paused;scheduleUI();},demoCrc:()=>{app.demo.corrupt=true;log('다음 가상 패킷의 CRC를 손상합니다.','warn');},clearLog:()=>{app.logLines=[];$('log').replaceChildren();},saveLog:()=>downloadBlob(new Blob([app.logLines.join('\n')],{type:'text/plain;charset=utf-8'}),'SMART_INK_log.txt'),selfTest:()=>runSelfTests()}))$(id).addEventListener('click',safely(fn));
+$('inputSource').addEventListener('change',e=>setSource(e.target.value));$('pageNumber').addEventListener('change',safely(e=>changePage(e.target.value)));$('pdfInput').addEventListener('change',safely(e=>openPdfFile(e.target.files[0])));$('calibrationForm').addEventListener('submit',applyCalibration);$('penWidth').addEventListener('input',()=>{finishStroke();scheduleUI();});$('penColor').addEventListener('input',finishStroke);
+document.addEventListener('keydown',e=>{if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;if(e.code==='Space'){e.preventDefault();app.space=true;finishStroke();scheduleUI();}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();historyStep(e.shiftKey);}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){e.preventDefault();historyStep(true);}else if(!e.ctrlKey&&!e.metaKey){if(e.key.toLowerCase()==='p')setMode('PEN');if(e.key.toLowerCase()==='e')setMode('ERASER');}});
+document.addEventListener('keyup',e=>{if(e.code==='Space'){app.space=false;scheduleUI();}});
+window.addEventListener('beforeunload',e=>{if(hasUnsaved()){e.preventDefault();e.returnValue='';}});
+if('serial'in navigator){navigator.serial.addEventListener('disconnect',e=>{const port=e.port||e.target;if(port===stm.port)void stm.disconnect('USB 분리');});}
+if(!('serial'in navigator)||!isSecureContext){$('compatNotice').hidden=false;$('compatNotice').textContent='장치 연결은 데스크톱 Chrome/Edge의 http://localhost:8000 또는 HTTPS에서 실행하세요. 마우스와 데모는 계속 사용할 수 있습니다.';}
+applyCalToUI();safely(async()=>{await renderPage();await fitWidth();})();log('SMART INK · #1 SPI · #2/Uno UART → STM32 #3 → PC 단일 COM');
+</script>
+<!-- 자동 검증: 실제 하드웨어 시험과 구분한 소프트웨어 회귀 검사 -->
+<script id="smartink-tests">
+async function runSelfTests(){
+ if(app.busy||app.testing)return;app.testing=true;const lines=[],results=[];const out=$('testResults');out.textContent='검증 중…';$('selfTest').disabled=true;
+ const test=async(name,fn)=>{try{await fn();results.push({name,pass:true});lines.push('PASS  '+name);}catch(e){results.push({name,pass:false,error:e.message});lines.push('FAIL  '+name+' · '+e.message);}out.textContent=lines.join('\n');};
+ const assert=(value,message='조건 불일치')=>{if(!value)throw Error(message);};
+ const sample=(seq,extra={})=>({seq,x:0x1234,y:0xabcd,pressure:0x789a,press:1,touch:1,flags:1,...extra});
+ await test('CRC 표준 벡터 123456789 = F4',()=>assert(crc8(new TextEncoder().encode('123456789'))===0xf4));
+ await test('Little-endian / 분할·연속·잡음 수신',()=>{const got=[],p=new SensorParser(s=>got.push(s)),f=encodeSensor(sample(1));p.feed(new Uint8Array([0,3,0xaa]));p.feed(f.slice(0,6));p.feed(f.slice(6));p.feed(new Uint8Array([...encodeSensor(sample(2)),...encodeSensor(sample(3))]));assert(got.length===3&&got[0].x===0x1234&&got[0].y===0xabcd&&got[0].pressure===0x789a);});
+ await test('CRC 오류 및 LEN 오류 후 재동기화',()=>{const got=[],p=new SensorParser(s=>got.push(s)),bad=encodeSensor(sample(1));bad[14]^=1;p.feed(new Uint8Array([0xaa,0x55,0x10,33,...bad,...encodeSensor(sample(2))]));assert(got.length===1&&got[0].seq===2&&p.stats.crc===1&&p.stats.invalid===1);});
+ await test('seq 순환 / 누락 / 중복 / 재시작',()=>{let count=0;const p=new SensorParser(()=>count++);for(const seq of [254,255,0,3,3,2])p.feed(encodeSensor(sample(seq)));assert(p.stats.missing===2&&p.stats.duplicates===1&&p.stats.resets===1&&count===5);});
+ await test('불완전 프레임 만료 및 정상 복귀',()=>{const got=[],p=new SensorParser(s=>got.push(s));p.feed(new Uint8Array([0xaa,0x55,0x10,10,1]),1);p.expire(1000);p.feed(encodeSensor(sample(4)),1001);assert(got.length===1&&p.stats.invalid===1);});
+ await test('SENSOR 모드/음소거/모드 stale 해석',()=>{assert(modeFromSensor(sample(0))==='PEN');assert(modeFromSensor(sample(0,{flags:17}))==='ERASER');assert(modeFromSensor(sample(0,{flags:49}))===null);assert(!canDraw(sample(0,{flags:33})));assert(canDraw(sample(0,{flags:65})));});
+ await test('TOUCH/PRESS/DRAW/STALE/RX_ERROR 판정',()=>{assert(canDraw(sample(0)));for(const extra of [{touch:0},{press:0},{flags:0},{flags:3},{flags:5},{flags:33}])assert(!canDraw(sample(0,extra)));assert(canDraw(sample(0,{flags:9})),'RX_ERROR만으로는 획을 끊지 않음');assert(canDraw(sample(0,{flags:17})),'ERASER도 유효한 접촉에서는 지우기 허용');});
+ await test('좌표 보정·축 교환·필압 굵기',()=>{const c={...DEFAULT_CAL,swapAxes:true,invertX:true};const p=mapSensor({x:0,y:4095},c,600,800);assert(p.x===0&&p.y===0);assert(pressureWidth(3,0,true)<pressureWidth(3,1,true));assert(pressureWidth(3,0,false)===3);});
+ await test('필기/지우개 합성 및 다시 그리기',()=>{const p={width:100,height:100,ops:[{tool:'PEN',color:'#245ae8',points:[{x:10,y:50,w:10},{x:90,y:50,w:10}]},{tool:'ERASER',points:[{x:50,y:50,w:20}]}]};const c=createInkCanvas(p,1),ctx=c.getContext('2d');assert(ctx.getImageData(50,50,1,1).data[3]===0);assert(ctx.getImageData(20,50,1,1).data[3]===255);p.ops.pop();const restored=createInkCanvas(p,1);assert(restored.getContext('2d').getImageData(50,50,1,1).data[3]===255);});
+ await test('Web Serial 모의 연결/분할 입력/정상 해제',async()=>{let controller,written='',closed=0,received='';const port={readable:new ReadableStream({start(c){controller=c;}}),writable:new WritableStream({write(b){written+=new TextDecoder().decode(b);}}),async open(o){assert(o.baudRate===115200);},async close(){assert(!this.readable.locked&&!this.writable.locked);closed++;}};const channel=new SerialChannel('TEST',b=>received+=new TextDecoder().decode(b),()=>{},()=>{});assert(await channel.connect({requestPort:async()=>port}));await channel.writeLine('TEST\n');controller.enqueue(new TextEncoder().encode('TEST_REPLY\n'));await new Promise(r=>setTimeout(r,10));await channel.disconnect();assert(received==='TEST_REPLY\n'&&written==='TEST\n'&&closed===1&&channel.state==='closed');});
+ await test('Web Serial 모의 취소/실패/USB 분리',async()=>{const channel=new SerialChannel('TEST',()=>{},()=>{},()=>{});assert(!await channel.connect({requestPort:async()=>{throw new DOMException('취소','NotFoundError');}}));assert(channel.state==='closed');assert(!await channel.connect({requestPort:async()=>({open:async()=>{throw Error('port busy');}})}));let control,closed=false;const port={readable:new ReadableStream({start(c){control=c;}}),writable:new WritableStream(),async open(){},async close(){closed=true;}};assert(await channel.connect({requestPort:async()=>port}));control.error(Error('USB removed'));await new Promise(r=>setTimeout(r,30));assert(channel.state==='closed'&&closed);});
+ await test('PDF 다중 페이지/회전/CropBox/지우개 저장',async()=>{await ensurePDFJS();const lib=await ensurePDFLib(),d=await lib.PDFDocument.create();for(const rotation of [0,90,180,270]){const p=d.addPage([400,500]);p.setCropBox(20,30,320,400);p.setRotation(lib.degrees(rotation));p.drawText('SMART INK ORIGINAL',{x:40,y:390,size:14});}const original=await d.save();const loaded=await pdfjs.getDocument(pdfOptions(original)).promise;const pages=new Map();try{for(let n=1;n<=4;n++){const proxy=await loaded.getPage(n),v=proxy.getViewport({scale:1});pages.set(n,{width:v.width,height:v.height,transform:[...v.transform],proxy,ops:[{tool:'PEN',color:'#245ae8',points:[{x:50,y:100,w:18},{x:150,y:100,w:18}]},{tool:'ERASER',points:[{x:100,y:100,w:30}]}]});}const bytes=await buildPdfBytes(original,pages);const exported=await pdfjs.getDocument(pdfOptions(bytes)).promise;try{assert(exported.numPages===4);for(let n=1;n<=4;n++){const p=await exported.getPage(n),v=p.getViewport({scale:1}),c=document.createElement('canvas');c.width=v.width;c.height=v.height;const ctx=c.getContext('2d');await p.render({canvasContext:ctx,viewport:v}).promise;const blue=ctx.getImageData(60,100,1,1).data,clear=ctx.getImageData(100,100,1,1).data;assert(blue[2]>170&&blue[0]<80,'회전 '+(n-1)*90+' 필기 위치');assert(clear[0]>240&&clear[1]>240,'지우개 결과');const text=await p.getTextContent();assert(text.items.some(i=>i.str.includes('SMART INK')),'원본 텍스트 보존');}}finally{await exported.destroy();}}finally{await loaded.destroy();}});
+ const passed=results.filter(r=>r.pass).length;out.textContent=`${passed}/${results.length} 통과\n`+lines.join('\n')+'\n※ 실제 COM 포트·버튼·LED는 하드웨어 시험이 필요합니다.';window.SMARTINK_TEST_RESULTS=results;log(`소프트웨어 자동 검증 ${passed}/${results.length}`,passed===results.length?'ok':'error');app.testing=false;scheduleUI();return results;
+}
+</script>
+</body>
+</html>
